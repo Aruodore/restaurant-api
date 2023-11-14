@@ -13,7 +13,6 @@ class Model extends Database{
 	// Table name of the model
 	public $table;
 
-	// Global query of this model to be use by `cquery`
 	public  $table_column_query = null;
 
 	// Specify the table columns

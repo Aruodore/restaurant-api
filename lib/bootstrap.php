@@ -26,34 +26,31 @@ header("Content-type: application/json; charset=UTF-8");
 
 if(($url[2] !== "restaurants") AND ($url[2] !== 'locations') AND ($url[2] !== 'categories')) {
     http_response_code(404);
+    echo json_encode([
+        'error'=> 'EndPoint does not exist',
+    ]);
     exit;
 }
 
-$id = $url[3] ?? null;
-$sub  = $url[4] ?? null;
+function callHook()
+{
+    global $url;
+    $enpt = $url[2];
+    $id = $url[3] ?? null;
+    $sub  = $url[4] ?? null;
 
+    $model = $enpt === 'categories'? 'category' : rtrim($enpt, 's');
+    $model = ucfirst($model);
+    $controller = $model . 'Controller';
 
-if($url[2] === 'categories'){
-    $model = new Category;
-    $controller = new CategoryController($model);
+    $model = new $model;
+
+    $controller = new $controller( $model );
 
     $controller->processRequest($_SERVER['REQUEST_METHOD'], $id, $sub);
 }
 
-if($url[2] === 'locations'){
-    $model = new Location;
-    $controller = new LocationController($model);
-
-    $controller->processRequest($_SERVER['REQUEST_METHOD'], $id, $sub);
-}
-
-
-if ($url[2] === 'restaurants') {
-    $model = new Restaurant;
-    $controller = new RestaurantController($model);
-    
-    $controller->processRequest($_SERVER['REQUEST_METHOD'], $id, $sub);
-}
+callHook();
 
 
 

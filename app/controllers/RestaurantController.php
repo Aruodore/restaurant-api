@@ -1,4 +1,5 @@
 <?php
 
-class RestaurantController extends Controller{
+class RestaurantController extends Controller
+{
 }

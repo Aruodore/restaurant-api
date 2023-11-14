@@ -10,7 +10,6 @@ class Controller{
      public function processRequest(string $method, string|null $id, string|null $sub): void{
         if($sub AND $id){
             $this->processCollectionSubRequest($method, $id, $sub);
-            // echo json_encode($sub);
 
         } elseif ($id) {
             $this->processResourceRequest($method, $id);
@@ -32,7 +31,7 @@ class Controller{
 
         switch ($method) {
             case "GET":
-                echo json_encode($record, JSON_UNESCAPED_UNICODE);
+                echo json_encode(["status"=>'success',"data"=>$record], JSON_UNESCAPED_UNICODE);
                 break;
             case "PATCH":
                   $data =(array) json_decode(file_get_contents('php://input'));
@@ -73,10 +72,15 @@ class Controller{
         
         switch ($method) {
             case "GET":
-                echo json_encode($this->model->getAll());
+                $data = $this->model->getAll();
+                $this->emptyData($data);
+                
+                echo json_encode([
+                    "status"=> "success",
+                    "data"=> $data
+                ]);
                 break;
             case "POST":
-                // $data = $_POST;
                 $data =(array) $_POST;
                 $error = $this->getValidationErrors($data);
                 if(!empty($error)){
@@ -125,6 +129,19 @@ class Controller{
             }
         }
         return $errors;
+    }
+
+    private function emptyData(array $data)
+    {
+          if(empty($data)){
+                    http_response_code(204);
+                    echo json_encode([
+                    "status"=> "success",
+                    "data"=> $data
+                ]);
+            exit();
+         }
+
     }
     
 }

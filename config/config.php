@@ -29,6 +29,5 @@
         define('DB_NAME', '');
 		define('DB_ERROR', false);
         define ('DEVELOPMENT_ENVIRONMENT',false);
-    
 
 	}
