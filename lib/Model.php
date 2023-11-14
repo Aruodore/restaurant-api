@@ -93,7 +93,7 @@ class Model extends Database{
 	}
 
 
-	public function insert(array|null $data = null):array
+	public function insert(array|null $data = null)
     {
 
 		# Cast array into an object
@@ -122,12 +122,10 @@ class Model extends Database{
 		}
 		$this->execute();
 
-		# Get the inserted ID
-		$this->query("SELECT LAST_INSERT_ID() AS 'last' FROM " . $this->table);
-		$newID = $this->resultSingle()->last;
-	
 		# Get inserted data
-		return $this->get($newID);
+		$this->query("SELECT * FROM $this->table WHERE  $this->table_ref=(SELECT max($this->table_ref) FROM $this->table)");
+
+		return $this->resultSingle();
 	}
 
 

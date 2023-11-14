@@ -88,12 +88,12 @@ class Controller{
                     echo json_encode(['error'=>$error]);
                     break;
                 }
-              $id = $this->model->insert($data);
+              $newData = $this->model->insert($data);
               http_response_code(201);
 
                 echo json_encode([
                     "message" => "Record created",
-                    "id" => $id
+                    "data" => $newData
                 ]);
                 break;
             default:
@@ -120,14 +120,14 @@ class Controller{
     {
         $errors = [];
 
-        if ($is_new && empty($data["name"])) {
-            $errors["name"] = "name is required";
-        }
-        if (array_key_exists("size", $data)) {
-            if (filter_var($data["size"], FILTER_VALIDATE_INT) === false) {
-                $errors["size"] = 'size must be an integer';
-            }
-        }
+        // if ($is_new && empty($data["name"])) {
+        //     $errors["name"] = "name is required";
+        // }
+        // if (array_key_exists("size", $data)) {
+        //     if (filter_var($data["size"], FILTER_VALIDATE_INT) === false) {
+        //         $errors["size"] = 'size must be an integer';
+        //     }
+        // }
         return $errors;
     }
 
